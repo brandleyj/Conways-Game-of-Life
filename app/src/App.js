@@ -1,8 +1,9 @@
 import React, { useState, useRef, useCallback } from 'react';
 import produce from 'immer';
 
-const Rows = 40
-const Cols = 40
+let Rows = 40;
+let Cols = 40;
+let Count = 0;
 
 const ops = [
   [0, 1],
@@ -15,6 +16,14 @@ const ops = [
   [-1, -1]
 ]
 
+const resetGrid = () => {
+  const rows = [];
+    for (let i = 0; i < Rows; i++) {
+      rows.push(Array.from(Array(Cols), () => 0));
+    }
+    Count = 0;
+    return rows;
+}
 
 function App() {
   const [grid, setGrid] = useState(() => {
@@ -26,9 +35,13 @@ function App() {
   });
 
   const [active, setActive] = useState(false)
+  const [speed, setSpeed] = useState(100)
 
   const activeRef = useRef(active)
   activeRef.current = active
+
+  const speedRef = useRef(speed);
+  speedRef.current = speed
 
   const activeSim = useCallback(() => {
     if(!activeRef.current) {
@@ -56,9 +69,13 @@ function App() {
         }
       })
     })
-    setTimeout(activeSim)
+    setTimeout(activeSim, speedRef.current)
+    Count++
   }, [])
 
+  const handleChange = event => {
+    setSpeed(event.target.value)
+  }
   
   return (
     <div className="Container">
@@ -87,22 +104,66 @@ function App() {
         )))}
       </div>
       <div className="TextField">
-      <h1>Game of Life</h1>
-      <h2>Rules:</h2>
-      <ol>
-        <li>Any live cell with fewer than two live neighbors dies.</li>
-        <li>Any live cell with two or three live neighbors lives on to the next generation.</li>
-        <li>Any live cell with more than three live neighbors dies.</li>
-        <li>And dead cell with exactly three live neighbors becomes a live cell.</li>
-      </ol>
-      <button onClick={() => {
-        setActive(!active)
-        if(!active) {
-          activeRef.current = true
-          activeSim()
-        }
-      }}>{active ? 'stop' : 'start'}
-      </button>
+        <h1>Game of Life</h1>
+        <h2>Rules:</h2>
+        <ol>
+          <li>Any live cell with fewer than two live neighbors dies.</li>
+          <li>Any live cell with two or three live neighbors lives on to the next generation.</li>
+          <li>Any live cell with more than three live neighbors dies.</li>
+          <li>And dead cell with exactly three live neighbors becomes a live cell.</li>
+        </ol>
+        <p>Generations: {Count}</p>
+        <button onClick={() => {
+          setActive(!active)
+          if(!active) {
+            activeRef.current = true;
+            Count = 0;
+            activeSim();
+          }
+        }}>{active ? 'Stop' : 'Start'}
+        </button>
+        <button onClick={() => {
+          Rows = 40;
+          Cols = 40;
+          setGrid(resetGrid());
+        }}>
+          Reset
+        </button>
+        <button onClick={() => {
+          const rows = [];
+          for (let i = 0; i < Rows; i++) {
+            rows.push(Array.from(Array(Cols), () => Math.random() > .5))
+          }
+          Count = 0;
+          setGrid(rows)
+        }}>Random</button>
+        <p>Speed</p>
+        <input
+          type="range"
+          name='speed'
+          className="slider"
+          onChange={handleChange} 
+          value={speed.value}
+        />
+        <p>Rows</p>
+        <button onClick={( ) => {
+        Rows++;
+          setGrid(resetGrid());
+        }}>+</button>
+        <button onClick={( ) => {
+        Rows--;
+          setGrid(resetGrid());
+        }}>-</button>
+        <p>Columns</p>
+        <button onClick={( ) => {
+        Cols++;
+          setGrid(resetGrid());
+        }}>+</button>
+        <button onClick={( ) => {
+        Cols--;
+          setGrid(resetGrid());
+        }}>-
+        </button>
       </div>
     </div>
   );

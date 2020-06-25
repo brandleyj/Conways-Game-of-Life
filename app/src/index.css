@@ -6,10 +6,40 @@ body{
 .Container {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 }
 
 .TextField {
-justify-content: center;
+justify-content: flex-end;
 align-items: center;
 margin: 10px;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 50%;
+  height: 25px;
+  background: linear-gradient(0.25turn, #02a12a, #ebf8e1, #e60f0f);
+  outline: none;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: black;
+  border: 1px solid white;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: black;
+  cursor: pointer;
 }
