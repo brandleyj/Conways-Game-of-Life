@@ -35,7 +35,7 @@ function App() {
   });
 
   const [active, setActive] = useState(false)
-  const [speed, setSpeed] = useState(100)
+  const [speed, setSpeed] = useState(50)
 
   const activeRef = useRef(active)
   activeRef.current = active
@@ -120,13 +120,18 @@ function App() {
             Count = 0;
             activeSim();
           }
-        }}>{active ? 'Stop' : 'Start'}
+        }}
+        id="button"
+        >{active ? 'Stop' : 'Start'}
         </button>
         <button onClick={() => {
           Rows = 40;
           Cols = 40;
           setGrid(resetGrid());
-        }}>
+        }}
+        className="reset"
+        id="button"
+        >
           Reset
         </button>
         <button onClick={() => {
@@ -136,8 +141,10 @@ function App() {
           }
           Count = 0;
           setGrid(rows)
-        }}>Random</button>
-        <p>Speed</p>
+        }}
+        id="button"
+        >Random</button>
+        <p>Speed: {speed}</p>
         <input
           type="range"
           name='speed'
@@ -145,24 +152,33 @@ function App() {
           onChange={handleChange} 
           value={speed.value}
         />
-        <p>Rows</p>
+        <p>Rows: {Rows}</p>
         <button onClick={( ) => {
         Rows++;
           setGrid(resetGrid());
-        }}>+</button>
+        }}
+        className="margin"
+        id="button"
+        >+</button>
         <button onClick={( ) => {
         Rows--;
           setGrid(resetGrid());
-        }}>-</button>
-        <p>Columns</p>
+        }}
+        id="button"
+        >-</button>
+        <p>Columns: {Cols}</p>
         <button onClick={( ) => {
         Cols++;
           setGrid(resetGrid());
-        }}>+</button>
+        }}
+        className="margin"
+        id="button"
+        >+</button>
         <button onClick={( ) => {
         Cols--;
           setGrid(resetGrid());
-        }}>-
+        }}
+        id="button">-
         </button>
       </div>
     </div>
